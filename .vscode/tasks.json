@@ -1,0 +1,20 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "crop-sequence2",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$ErrorActionPreference = 'Stop'; $root = 'C:\\Users\\pande\\PortfolioWebsite'; $ffmpeg = Join-Path $root 'node_modules\\ffmpeg-static\\bin\\win32\\x64\\ffmpeg.exe'; $input = Join-Path $root 'sequence2.mp4'; $temp = Join-Path $root 'sequence2_cropped.mp4'; $backup = Join-Path $root 'sequence2.mp4.bak'; $report = Join-Path $root 'sequence2_crop_report.txt'; try { if (-not (Test-Path $ffmpeg)) { throw \"FFmpeg not found: $ffmpeg\" }; if (-not (Test-Path $input)) { throw \"Input video not found: $input\" }; $before = Get-Item $input; & $ffmpeg -y -i $input -vf 'crop=in_w:in_h-100' -c:a copy $temp; if ($LASTEXITCODE -ne 0) { throw \"ffmpeg failed with exit code $LASTEXITCODE\" }; if (Test-Path $backup) { Remove-Item $backup -Force }; Move-Item $input $backup; Move-Item $temp $input; $after = Get-Item $input; $bak = Get-Item $backup; @(\"Status=Success\", \"BeforeBytes=$($before.Length)\", \"AfterBytes=$($after.Length)\", \"BackupBytes=$($bak.Length)\", \"Output=$input\", \"Backup=$backup\") | Set-Content -Path $report -Encoding ASCII } catch { @(\"Status=Error\", \"Message=$($_.Exception.Message)\") | Set-Content -Path $report -Encoding ASCII; exit 1 }"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}

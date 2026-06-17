@@ -111,24 +111,47 @@
       mix-blend-mode: difference;
     }
 
+    /* focus-reticle cursor: four corner brackets framing the dot */
     #cur-ring {
       position: fixed;
-      width: 38px;
-      height: 38px;
-      border: 1.5px solid var(--gold);
-      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      --bk: 1.5px;
+      /* bracket thickness */
+      --arm: 9px;
+      /* bracket arm length */
+      --bc: var(--gold);
+      /* bracket color */
+      background-image:
+        linear-gradient(var(--bc), var(--bc)), linear-gradient(var(--bc), var(--bc)),
+        linear-gradient(var(--bc), var(--bc)), linear-gradient(var(--bc), var(--bc)),
+        linear-gradient(var(--bc), var(--bc)), linear-gradient(var(--bc), var(--bc)),
+        linear-gradient(var(--bc), var(--bc)), linear-gradient(var(--bc), var(--bc));
+      background-repeat: no-repeat;
+      background-position:
+        0 0, 0 0,
+        100% 0, 100% 0,
+        0 100%, 0 100%,
+        100% 100%, 100% 100%;
+      background-size:
+        var(--arm) var(--bk), var(--bk) var(--arm),
+        var(--arm) var(--bk), var(--bk) var(--arm),
+        var(--arm) var(--bk), var(--bk) var(--arm),
+        var(--arm) var(--bk), var(--bk) var(--arm);
       pointer-events: none;
       z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: width .25s ease, height .25s ease, opacity .25s ease, border-color .25s ease;
-      opacity: .55;
+      transform: translate(-50%, -50%) rotate(0deg);
+      transition: width .25s ease, height .25s ease, opacity .25s ease, transform .35s ease;
+      opacity: .6;
     }
 
     #cur-ring.big {
-      width: 64px;
-      height: 64px;
-      opacity: .25;
-      border-color: var(--gold-bright);
+      width: 58px;
+      height: 58px;
+      opacity: .9;
+      --bc: var(--gold-bright);
+      --arm: 13px;
+      transform: translate(-50%, -50%) rotate(45deg);
     }
 
     /* ─── INTRO VIDEO LOADER ───────────────────────────────────── */
@@ -140,6 +163,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
       transition: opacity 1s ease, visibility 1s ease;
     }
 
@@ -149,10 +173,12 @@
     }
 
     #intro-vid {
+      display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
+      position: relative;
+      z-index: 0;
     }
 
     /* on phones the landscape video gets cropped/zoomed — show it whole instead */
@@ -176,7 +202,7 @@
       padding: 10px 22px;
       cursor: none;
       transition: all .3s;
-      z-index: 1;
+      z-index: 2;
     }
 
     #intro-skip:hover {
@@ -205,6 +231,7 @@
     }
 
     .nav-logo {
+      display: none;
       font-family: var(--ff-brand);
       font-size: 1.1rem;
       font-weight: 700;
@@ -322,6 +349,9 @@
       z-index: 0;
       pointer-events: none;
       object-fit: cover;
+      /* zoom from top-left so the bottom-right Gemini watermark is pushed off-screen */
+      transform: scale(1.22);
+      transform-origin: top left;
     }
 
     /* radial vignette overlay on hero only */
@@ -967,6 +997,14 @@
       position: relative;
     }
 
+    section>.sec-label {
+      display: none;
+    }
+
+    .sep {
+      display: none;
+    }
+
     /* enhanced separator — glowing diamond accent */
     .sep {
       width: 100%;
@@ -1066,7 +1104,7 @@
 
     /* ─── ABOUT ────────────────────────────────────────────────── */
     #about {
-      background: rgba(11, 11, 11, .9);
+      background: #040404;
     }
 
     .about-grid {
@@ -1204,82 +1242,117 @@
       color: var(--white);
     }
 
-    /* Education */
-    .edu-list {
-      margin-top: 44px;
-    }
-
-    .edu-item {
+    /* Education Sticky Scroll */
+    .edu-sticky-container {
       display: flex;
-      gap: 22px;
-      margin-bottom: 32px;
-      position: relative;
+      flex-direction: column;
+      margin-top: 60px;
     }
 
-    .edu-item:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      left: 4px;
-      top: 20px;
-      width: 1px;
-      height: calc(100% + 8px);
-      background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    @media (min-width: 768px) {
+      .edu-sticky-container {
+        flex-direction: row;
+        align-items: flex-start;
+      }
     }
 
-    .edu-dot {
-      width: 9px;
-      height: 9px;
-      flex-shrink: 0;
-      margin-top: 4px;
-      border: 1px solid var(--gold);
-      border-radius: 50%;
-      position: relative;
-      background: var(--black-2);
+    .edu-sticky-left {
+      flex: 1;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 40px;
     }
 
-    .edu-dot::after {
-      content: '';
-      position: absolute;
-      inset: 2px;
-      background: var(--gold);
-      border-radius: 50%;
-    }
-
-    .edu-deg {
+    .edu-huge-year {
       font-family: var(--ff-disp);
-      font-size: 1.05rem;
-      font-weight: 500;
-      color: var(--white);
-      margin-bottom: 3px;
-    }
-
-    .edu-school {
-      font-family: var(--ff-sans);
-      font-size: .74rem;
-      font-weight: 300;
-      letter-spacing: .08em;
-      color: var(--white-d);
-      margin-bottom: 3px;
-    }
-
-    .edu-yr {
-      font-family: var(--ff-mono);
-      font-size: .62rem;
+      font-size: clamp(6rem, 15vw, 12rem);
+      font-weight: 200;
+      line-height: 1;
       color: var(--gold-dim);
-      letter-spacing: .1em;
+      opacity: 0.8;
+      margin: 0;
+      transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      /* A subtle floating animation */
+      animation: floatYear 6s ease-in-out infinite;
+    }
+
+    @keyframes floatYear {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .edu-sticky-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 25vh 20px 25vh;
+      position: relative;
+      margin-left: 20px;
+    }
+
+    .edu-scroll-item {
+      min-height: 25vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
+      position: relative;
+      padding-left: 40px;
+    }
+
+    /* Cinematic scroll effect */
+    .edu-scroll-item.active {
+      opacity: 1;
+      transform: translateX(10px) scale(1.02);
+      filter: blur(0px);
+    }
+
+    .edu-scroll-item:not(.active) {
+      opacity: 0.15;
+      transform: translateX(0) scale(0.95);
+      filter: blur(3px);
+    }
+
+    .edu-scroll-content {
+      max-width: 500px;
+    }
+
+    .edu-scroll-deg {
+      font-family: var(--ff-disp);
+      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+
+    .edu-scroll-school {
+      font-family: var(--ff-sans);
+      font-size: 0.95rem;
+      color: var(--white-d);
+      margin-bottom: 10px;
+    }
+
+    .edu-scroll-dur {
+      font-family: var(--ff-mono);
+      font-size: 0.8rem;
+      color: var(--gold-dim);
+      letter-spacing: 0.05em;
+    }
+
+    /* Modifiers added by JS */
+    .edu-huge-year.changing {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
     }
 
     /* ─── SKILLS ───────────────────────────────────────────────── */
     #skills {
-      background: rgba(4, 4, 4, .88);
-    }
-
-    .skills-wrap {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 80px;
-      align-items: center;
-      justify-items: center;
+      background: #040404;
     }
 
     .skills-intro {
@@ -1288,68 +1361,155 @@
       font-weight: 300;
       line-height: 1.85;
       color: var(--white-d);
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 60px;
     }
 
-    .skill-cat {
-      margin-bottom: 28px;
+    /* Bento Grid Layout */
+    .sk-bento-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    @media (min-width: 768px) {
+      .bento-span-2 {
+        grid-column: span 2;
+      }
+      .sk-bento-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .sk-bento-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      gap: 24px;
+      transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
-    .sk-cat-lbl {
+    .sk-bento-card:hover {
+      border-color: rgba(201, 168, 76, 0.3);
+      transform: translateY(-4px);
+    }
+
+    /* Magic Glow Effect */
+    .bento-glow {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle closest-side, rgba(201, 168, 76, 0.15), transparent);
+      border-radius: 50%;
+      top: var(--mouse-y, -400px);
+      left: var(--mouse-x, -400px);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .sk-bento-card:hover .bento-glow {
+      opacity: 1;
+    }
+
+    .bento-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .bento-header {
+      margin-bottom: auto;
+      padding-bottom: 24px;
+    }
+
+    .bento-num {
       font-family: var(--ff-mono);
-      font-size: .62rem;
-      letter-spacing: .25em;
-      color: var(--gold);
-      text-transform: uppercase;
-      margin-bottom: 14px;
-      text-align: center;
+      font-size: 0.85rem;
+      color: var(--gold-dim);
+      display: block;
+      margin-bottom: 12px;
     }
 
-    .sk-tags {
+    .bento-title {
+      font-family: var(--ff-disp);
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+
+    .bento-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      justify-content: center;
     }
 
-    .sk-tag {
-      padding: 8px 15px;
-      border: 1px solid rgba(201, 168, 76, .18);
+    .bento-tags span {
       font-family: var(--ff-sans);
-      font-size: .68rem;
-      font-weight: 300;
-      letter-spacing: .1em;
+      font-size: 0.75rem;
       color: var(--white-d);
-      position: relative;
-      overflow: hidden;
-      transition: color .35s, border-color .35s;
-      cursor: default;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
     }
 
-    .sk-tag::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(201, 168, 76, .07);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .35s;
+    .sk-bento-card:hover .bento-tags span {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: var(--gold-bright);
     }
 
-    .sk-tag:hover {
-      color: var(--gold-lt);
-      border-color: var(--gold);
-    }
-
-    .sk-tag:hover::before {
-      transform: scaleX(1);
+    @media (max-width: 768px) {
+      .edu-timeline::before {
+        left: 10px;
+      }
+      .edu-row {
+        flex-direction: column;
+        padding-left: 32px;
+      }
+      .edu-time {
+        text-align: left;
+        padding-right: 0;
+        width: 100%;
+        margin-bottom: 8px;
+      }
+      .edu-marker {
+        position: absolute;
+        left: 0;
+        top: 32px;
+      }
+      .edu-marker::before {
+        left: 4px;
+      }
+      .edu-details {
+        padding-left: 0;
+      }
+      .edu-row:hover .edu-deg {
+        transform: translateX(5px) scale(1.02);
+      }
     }
 
     /* ─── PROJECTS ─────────────────────────────────────────────── */
     #projects {
-      background: rgba(11, 11, 11, .9);
+      background: #040404;
     }
 
     .proj-grid {
@@ -1366,7 +1526,6 @@
       overflow: hidden;
       cursor: none;
       transition: background .4s;
-      transform-style: preserve-3d;
     }
 
     .proj-card::before {
@@ -1464,7 +1623,7 @@
 
     /* ─── EXPERIENCE — WINDING ENERGY PATH ─────────────────── */
     #experience {
-      background: rgba(4, 4, 4, .88);
+      background: #040404;
     }
 
     .exp-wrap {
@@ -1531,6 +1690,14 @@
       transition: cx .35s ease, cy .35s ease;
     }
 
+    .tl-orb,
+    .tl-orb-core,
+    .exp-item::before,
+    .exp-item::after,
+    .exp-item .node-burst {
+      display: none;
+    }
+
     .exp-item {
       padding-left: 48px;
       padding-bottom: 52px;
@@ -1538,7 +1705,7 @@
     }
 
     /* NODE — diamond shape */
-    .exp-item::before {
+    .exp-item::before, .edu-scroll-item::before {
       content: '';
       position: absolute;
       left: -6px;
@@ -1553,7 +1720,7 @@
       transition: border-color .5s ease, box-shadow .6s ease, background .5s ease;
     }
 
-    .exp-item::after {
+    .exp-item::after, .edu-scroll-item::after {
       content: '';
       position: absolute;
       left: -1px;
@@ -1568,7 +1735,7 @@
     }
 
     /* LIT — diamond fills + expanding neon pulse */
-    .exp-item.lit::before {
+    .exp-item.lit::before, .edu-scroll-item.lit::before {
       border-color: var(--gold-bright);
       background: rgba(232, 200, 107, .06);
       box-shadow:
@@ -1578,7 +1745,7 @@
       animation: diamondPulse 3s ease-in-out infinite;
     }
 
-    .exp-item.lit::after {
+    .exp-item.lit::after, .edu-scroll-item.lit::after {
       background: var(--gold-bright);
       box-shadow: 0 0 10px var(--gold-bright), 0 0 22px rgba(232, 200, 107, .4);
       transform: rotate(45deg) scale(1.5);
@@ -1597,7 +1764,7 @@
     }
 
     /* one-shot burst ring */
-    .exp-item .node-burst {
+    .exp-item .node-burst, .edu-scroll-item .node-burst {
       position: absolute;
       left: -11px;
       top: -1px;
@@ -1610,7 +1777,7 @@
       opacity: 0;
     }
 
-    .exp-item.lit .node-burst {
+    .exp-item.lit .node-burst, .edu-scroll-item.lit .node-burst {
       animation: nodeBurst .9s cubic-bezier(.2, .8, .3, 1) forwards;
     }
 
@@ -1675,7 +1842,7 @@
 
     /* ─── ACHIEVEMENTS ─────────────────────────────────────────── */
     #achievements {
-      background: rgba(11, 11, 11, .9);
+      background: #040404;
     }
 
     .ach-grid {
@@ -1751,7 +1918,7 @@
 
     /* ─── CERTIFICATIONS ───────────────────────────────────────── */
     #certifications {
-      background: rgba(4, 4, 4, .88);
+      background: #040404;
     }
 
     .cert-grid {
@@ -1973,7 +2140,7 @@
 
     /* ─── ABOUT ME STORY ───────────────────────────────────────── */
     #about-me {
-      background: rgba(19, 19, 19, .9);
+      background: #040404;
     }
 
     .aboutme-wrap {
@@ -2203,10 +2370,8 @@
 
     .sec-label::before,
     .sec-label::after {
-      content: '';
-      width: 38px;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+      content: none;
+      display: none;
     }
 
     /* section titles — display serif, centered */
@@ -2318,15 +2483,16 @@
     /* PROJECTS — 3D horizontal carousel */
     .proj-carousel-container {
       width: 100%;
+      max-width: 1200px;
+      margin: 40px auto;
       perspective: 1200px;
-      margin: 40px 0;
       position: relative;
     }
 
     .proj-carousel-track {
       display: flex;
       gap: 30px;
-      padding: 40px calc(50vw - 200px);
+      padding: 40px calc(50% - 200px);
       /* 200px is half of the card width */
       overflow-x: auto;
       scroll-snap-type: x mandatory;
@@ -2339,24 +2505,28 @@
     }
 
     .proj-card {
-      text-align: center;
-      align-items: center;
-      min-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      text-align: left;
+      width: 100%;
+      min-width: min(85vw, 400px);
       max-width: 400px;
       flex-shrink: 0;
       scroll-snap-align: center;
-      transform-style: preserve-3d;
       transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
       will-change: transform;
+      transform: translateZ(0);
+      /* Force hardware acceleration to prevent background clipping bugs */
       /* default scale and transform for JS to override */
     }
 
     .proj-tags {
-      justify-content: center;
+      justify-content: flex-start;
     }
 
     .proj-link {
-      justify-content: center;
+      justify-content: flex-start;
     }
 
     /* EXPERIENCE — left-rail timeline, container centered on page */
@@ -2425,8 +2595,8 @@
        sections are unchanged — only material + motion.
        ═══════════════════════════════════════════════════════════ */
     :root {
-      --glass: rgba(18, 15, 9, .42);
-      --glass-strong: rgba(14, 12, 7, .62);
+      --glass: rgba(12, 10, 6, .50);
+      --glass-strong: rgba(9, 8, 5, .72);
       --glass-brd: rgba(232, 201, 107, .18);
       --glass-brd-lt: rgba(232, 201, 107, .40);
       --glass-blur: blur(16px) saturate(135%);
@@ -2482,15 +2652,18 @@
     }
 
     .proj-card {
-      background: linear-gradient(155deg, rgba(34, 28, 16, .5), rgba(12, 10, 6, .5));
+      background: linear-gradient(155deg, rgba(28, 22, 13, .56), rgba(9, 8, 5, .58));
       border: 1px solid var(--glass-brd);
       border-radius: 16px;
       box-shadow: var(--glass-sh);
       transition: background .4s var(--ease-g), border-color .4s var(--ease-g), box-shadow .4s var(--ease-g);
+      /* Fix WebKit backdrop-filter clipping bugs */
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+      mask-image: radial-gradient(white, black);
     }
 
     .proj-card:hover {
-      background: linear-gradient(155deg, rgba(46, 38, 20, .62), rgba(16, 13, 8, .6));
+      background: linear-gradient(155deg, rgba(38, 30, 17, .68), rgba(12, 10, 6, .68));
       border-color: var(--glass-brd-lt);
       box-shadow: 0 18px 50px rgba(0, 0, 0, .55), 0 0 0 1px rgba(232, 201, 107, .12), 0 1px 0 rgba(255, 240, 200, .12) inset;
     }
@@ -2503,7 +2676,7 @@
 
     /* ACHIEVEMENT cards — glass with cursor-follow glow (JS already drives --mx/--my) */
     .ach-card {
-      background: linear-gradient(155deg, rgba(34, 28, 16, .5), rgba(12, 10, 6, .52));
+      background: linear-gradient(155deg, rgba(28, 22, 13, .56), rgba(9, 8, 5, .6));
       border: 1px solid var(--glass-brd);
       border-radius: 16px;
       box-shadow: var(--glass-sh);
@@ -2523,7 +2696,7 @@
     }
 
     .cert-item {
-      background: var(--glass);
+      background: var(--glass-strong);
       border: 1px solid var(--glass-brd);
       border-radius: 14px;
       overflow: hidden;
@@ -2539,7 +2712,7 @@
 
     /* DETAIL + FACT chips — small frosted pills */
     .detail {
-      background: var(--glass);
+      background: var(--glass-strong);
       border: 1px solid var(--glass-brd);
       border-radius: 12px;
       padding: 16px 14px;
@@ -2552,7 +2725,7 @@
     }
 
     .fact-item {
-      background: var(--glass);
+      background: var(--glass-strong);
       border: 1px solid var(--glass-brd);
       border-radius: 14px;
       padding: 20px 26px;
@@ -2566,7 +2739,7 @@
 
     /* QUOTE — a frosted glass panel */
     .aboutme-quote {
-      background: linear-gradient(135deg, rgba(34, 28, 16, .4), rgba(12, 10, 6, .32));
+      background: linear-gradient(135deg, rgba(26, 21, 12, .46), rgba(9, 8, 5, .36));
       border: 1px solid var(--glass-brd);
       border-left: 2px solid var(--gold);
       border-radius: 0 16px 16px 0;
@@ -2576,7 +2749,7 @@
 
     /* EXPERIENCE entries — subtle glass cards along the rail */
     .exp-item {
-      background: linear-gradient(155deg, rgba(28, 23, 13, .34), rgba(10, 9, 5, .3));
+      background: linear-gradient(155deg, rgba(22, 18, 10, .4), rgba(8, 7, 4, .34));
       border: 1px solid var(--glass-brd);
       border-radius: 0 14px 14px 0;
       padding-top: 20px;
@@ -2589,11 +2762,12 @@
     .exp-item:hover {
       transform: translateX(6px);
       border-color: var(--glass-brd-lt);
-      background: linear-gradient(155deg, rgba(40, 33, 18, .46), rgba(14, 12, 7, .4));
+      background: linear-gradient(155deg, rgba(30, 24, 14, .5), rgba(11, 9, 6, .44));
     }
 
     /* PHOTO — glass frame */
     .photo-frame {
+      background: var(--glass);
       border: 1px solid var(--glass-brd);
       border-radius: 18px;
       overflow: hidden;
@@ -2606,7 +2780,7 @@
 
     /* SKILL pills + PROJECT tags — frosted */
     .sk-tag {
-      background: var(--glass);
+      background: rgba(9, 8, 5, .46);
       border: 1px solid var(--glass-brd);
       border-radius: 999px;
       transition: color .35s var(--ease-g), border-color .35s var(--ease-g), background .35s var(--ease-g), transform .35s var(--ease-g);
@@ -2618,14 +2792,14 @@
     }
 
     .proj-tag {
-      background: var(--glass);
+      background: rgba(9, 8, 5, .46);
       border: 1px solid var(--glass-brd);
       border-radius: 999px;
     }
 
     /* CONNECT social tiles — glass squares */
     .con-icon {
-      background: var(--glass);
+      background: var(--glass-strong);
       border: 1px solid var(--glass-brd);
       border-radius: 14px;
       backdrop-filter: var(--glass-blur);
@@ -3018,35 +3192,39 @@
           </div>
         </div>
 
-        <div class="edu-list">
-          <div class="sec-label" style="margin-bottom:22px;">Education</div>
-
-          <div class="edu-item rv" style="transition-delay:.3s">
-            <div class="edu-dot"></div>
-            <div>
-              <div class="edu-deg">B.E. Computer Engineering</div>
-              <div class="edu-school">Vidyavardhini's College of Engineering &amp; Technology (VCET), Vasai</div>
-              <div class="edu-yr">2022 — Expected June 2026</div>
-            </div>
+        <div class="edu-sticky-container">
+          <div class="edu-sticky-left">
+            <div class="sec-label" style="margin-bottom:0;">Education</div>
+            <h1 class="edu-huge-year" id="eduYearDisplay">2026</h1>
           </div>
-
-          <div class="edu-item rv" style="transition-delay:.4s">
-            <div class="edu-dot"></div>
-            <div>
-              <div class="edu-deg">HSC — PCM + Computer Science</div>
-              <div class="edu-school">Shree L.R. Tiwari Junior College</div>
-              <div class="edu-yr">2020 — 2022</div>
+          <div class="edu-sticky-right" id="eduScrollArea">
+            
+            <div class="edu-scroll-item" data-year="2026">
+              <div class="edu-scroll-content">
+                <h3 class="edu-scroll-deg">B.E. Computer Engineering</h3>
+                <p class="edu-scroll-school">Vidyavardhini's College of Engineering &amp; Technology (VCET), Vasai</p>
+                <span class="edu-scroll-dur">2022 — Expected June 2026</span>
+              </div>
             </div>
-          </div>
 
-          <div class="edu-item rv" style="transition-delay:.5s">
-            <div class="edu-dot"></div>
-            <div>
-              <div class="edu-deg">SSC</div>
-              <div class="edu-school">St. Paul's High School</div>
-              <div class="edu-yr">Until 2020</div>
+            <div class="edu-scroll-item" data-year="2022">
+              <div class="edu-scroll-content">
+                <h3 class="edu-scroll-deg">HSC — PCM + Computer Science</h3>
+                <p class="edu-scroll-school">Shree L.R. Tiwari Junior College</p>
+                <span class="edu-scroll-dur">2020 — 2022</span>
+              </div>
             </div>
+
+            <div class="edu-scroll-item" data-year="2020">
+              <div class="edu-scroll-content">
+                <h3 class="edu-scroll-deg">SSC</h3>
+                <p class="edu-scroll-school">St. Paul's High School</p>
+                <span class="edu-scroll-dur">Until 2020</span>
+              </div>
+            </div>
+
           </div>
+        </div>
         </div>
       </div>
 
@@ -3057,64 +3235,50 @@
   <div class="sep"></div>
   <section id="about-me">
     <div class="sec-label rv">01b — About Me</div>
-    <div class="aboutme-wrap">
+    <div class="aboutme-wrap" style="display:flex; flex-direction:column; align-items:center; text-align:center;">
 
-      <blockquote class="aboutme-quote rv">
+      <blockquote class="aboutme-quote rv"
+        style="text-align:center; padding-left:0; border-left:none; max-width:800px; margin-left:auto; margin-right:auto;">
         "I don't just work with data — I <strong>listen</strong> to what it's trying to say,
         then build something that makes others hear it too."
       </blockquote>
 
-      <div class="aboutme-body">
-        <div class="rv" style="transition-delay:.08s">
-          <p class="aboutme-para">
-            Hi, I'm <em>Prathmesh Pandey</em> — a 22-year-old Computer Engineering student from Mumbai,
-            currently in my final year at VCET. My journey into tech started not with a textbook but with
-            curiosity: why does data look the way it does, and what decisions hide inside it?
+      <div class="aboutme-body" style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+        <div class="rv" style="transition-delay:.08s; max-width:800px;">
+          <p class="aboutme-para" style="text-align:center;">
+            Hi, I'm <em>Prathmesh Pandey</em> — a Computer Engineering student from Mumbai. My journey into tech started
+            with a simple curiosity: why does data look the way it does, and what decisions hide inside it?
           </p>
           <br>
-          <p class="aboutme-para">
-            That curiosity led me from Android development workshops to full-stack web projects, from
-            robotics competitions to publishing an <em>IEEE research paper</em> on AI-driven misinformation
-            detection — all before graduating. Every project taught me that the best engineers are equally
-            comfortable writing a SQL query and explaining its meaning to someone who has never coded a day
-            in their life.
+          <p class="aboutme-para" style="text-align:center;">
+            From full-stack web projects to publishing an <em>IEEE research paper</em> on AI-driven misinformation,
+            every project has taught me that the best engineers write great code and communicate its value clearly to
+            anyone.
           </p>
         </div>
-        <div class="rv" style="transition-delay:.16s">
-          <p class="aboutme-para">
-            Outside of code, I lead the <em>VCET Students' Council</em> social media team and build
-            outreach campaigns for the Microsoft Student Learning Club — which taught me that communication
-            and storytelling are just as powerful as any technical skill. Driving 35% audience growth or
-            a 60% jump in engagement isn't just a metric; it's proof that the right message, delivered
-            clearly, moves people.
-          </p>
-          <br>
-          <p class="aboutme-para">
-            I believe great analysts are also great communicators. My goal is to land a role where I can
-            blend both — building dashboards, models, and narratives that help organisations make faster,
-            smarter decisions. If that sounds like someone you want on your team, let's talk.
+        <div class="rv" style="transition-delay:.16s; max-width:800px;">
+          <p class="aboutme-para" style="text-align:center;">
+            I believe great analysts are also great communicators. My goal is to blend both — building dashboards,
+            models, and narratives that help organizations make faster, smarter decisions.
           </p>
         </div>
       </div>
 
-      <div class="aboutme-facts rv" style="transition-delay:.2s">
-        <div class="fact-item rv rv-zoom">
+      <div class="aboutme-facts rv"
+        style="transition-delay:.2s; display:flex; justify-content:center; flex-wrap:wrap; gap:40px; width:100%;">
+        <div class="fact-item rv rv-zoom" style="text-align:center;">
           <span class="fact-num">20+</span>
-          <span class="fact-lbl">Projects Shipped</span>
+          <span class="fact-lbl">Projects on GitHub</span>
         </div>
-        <div class="fact-item rv rv-zoom">
+        <div class="fact-item rv rv-zoom" style="text-align:center;">
           <span class="fact-num">1</span>
           <span class="fact-lbl">IEEE Paper Published</span>
         </div>
-        <div class="fact-item rv rv-zoom">
+        <div class="fact-item rv rv-zoom" style="text-align:center;">
           <span class="fact-num">3+</span>
           <span class="fact-lbl">Awards</span>
         </div>
-        <div class="fact-item rv rv-zoom">
-          <span class="fact-num">80%</span>
-          <span class="fact-lbl">Engagement Growth Led</span>
-        </div>
-        <div class="fact-item rv rv-zoom">
+        <div class="fact-item rv rv-zoom" style="text-align:center;">
           <span class="fact-num">2026</span>
           <span class="fact-lbl">Graduating</span>
         </div>
@@ -3126,61 +3290,90 @@
   <!-- ── SKILLS ─────────────────────────────────────────────────────── -->
   <div class="sep"></div>
   <section id="skills">
-    <div class="sec-label rv">02 — Skills</div>
-    <div class="skills-wrap">
-      <div class="rv" style="transition-delay:.05s">
-        <h2 class="sec-title">Technical<br>Arsenal</h2>
-        <p class="skills-intro">
-          Full-stack analytics fluency — from raw data wrangling and SQL querying to production dashboards,
-          ML pipelines, and interactive web apps.
-        </p>
+    <div class="sec-label rv" style="text-align:center;">02 — Skills</div>
+    <div class="rv" style="transition-delay:.05s">
+      <h2 class="sec-title" style="text-align:center; margin-bottom: 24px;">Technical <em>Arsenal</em></h2>
+      <p class="skills-intro">
+        Full-stack analytics fluency — from raw data wrangling and SQL querying to production dashboards,
+        ML pipelines, and interactive web apps.
+      </p>
+    </div>
+
+    <div class="sk-bento-grid" id="bentoGrid">
+      <div class="sk-bento-card bento-span-2 rv rv-up" style="transition-delay:.1s">
+        <div class="bento-glow"></div>
+        <div class="bento-content">
+          <div class="bento-header">
+            <span class="bento-num">01</span>
+            <h3 class="bento-title">Programming &amp; Querying</h3>
+          </div>
+          <div class="bento-tags">
+            <span>Python</span><span>JavaScript</span><span>TypeScript</span><span>SQL</span><span>Pandas</span><span>NumPy</span><span>R</span><span>C++</span><span>Java</span><span>Jupyter Notebook</span>
+          </div>
+        </div>
       </div>
-      <div class="rv" style="transition-delay:.15s">
-        <div class="skill-cat rv rv-up">
-          <div class="sk-cat-lbl">Programming &amp; Querying</div>
-          <div class="sk-tags">
-            <span class="sk-tag">Python</span><span class="sk-tag">Pandas</span>
-            <span class="sk-tag">NumPy</span><span class="sk-tag">SQL</span>
-            <span class="sk-tag">Jupyter Notebook</span><span class="sk-tag">Firebase</span>
+
+      <div class="sk-bento-card rv rv-up" style="transition-delay:.15s">
+        <div class="bento-glow"></div>
+        <div class="bento-content">
+          <div class="bento-header">
+            <span class="bento-num">02</span>
+            <h3 class="bento-title">Visualization &amp; BI</h3>
+          </div>
+          <div class="bento-tags">
+            <span>Tableau</span><span>Power BI</span><span>Plotly</span><span>Matplotlib</span><span>Seaborn</span><span>Recharts</span>
           </div>
         </div>
-        <div class="skill-cat rv rv-up">
-          <div class="sk-cat-lbl">Visualization &amp; BI</div>
-          <div class="sk-tags">
-            <span class="sk-tag">Tableau</span><span class="sk-tag">Power BI</span>
-            <span class="sk-tag">Plotly</span><span class="sk-tag">Matplotlib</span>
-            <span class="sk-tag">Seaborn</span><span class="sk-tag">Recharts</span>
+      </div>
+
+      <div class="sk-bento-card rv rv-up" style="transition-delay:.2s">
+        <div class="bento-glow"></div>
+        <div class="bento-content">
+          <div class="bento-header">
+            <span class="bento-num">03</span>
+            <h3 class="bento-title">Machine Learning &amp; AI</h3>
+          </div>
+          <div class="bento-tags">
+            <span>Scikit-learn</span><span>TensorFlow</span><span>Keras</span><span>NLP</span><span>CNNs</span><span>Anomaly Detection</span>
           </div>
         </div>
-        <div class="skill-cat rv rv-up">
-          <div class="sk-cat-lbl">Machine Learning &amp; AI</div>
-          <div class="sk-tags">
-            <span class="sk-tag">Scikit-learn</span><span class="sk-tag">TensorFlow</span>
-            <span class="sk-tag">Keras</span><span class="sk-tag">NLP</span>
-            <span class="sk-tag">CNNs</span><span class="sk-tag">Anomaly Detection</span>
+      </div>
+
+      <div class="sk-bento-card bento-span-2 rv rv-up" style="transition-delay:.25s">
+        <div class="bento-glow"></div>
+        <div class="bento-content">
+          <div class="bento-header">
+            <span class="bento-num">04</span>
+            <h3 class="bento-title">Databases &amp; Dev Tools</h3>
+          </div>
+          <div class="bento-tags">
+            <span>MySQL</span><span>PostgreSQL</span><span>MongoDB</span><span>SQLite</span><span>Firebase</span><span>Git &amp; GitHub</span><span>Docker</span><span>AWS</span><span>Postman</span><span>Microsoft Excel</span>
           </div>
         </div>
-        <div class="skill-cat rv rv-up">
-          <div class="sk-cat-lbl">Databases &amp; Dev Tools</div>
-          <div class="sk-tags">
-            <span class="sk-tag">MySQL</span><span class="sk-tag">PostgreSQL</span>
-            <span class="sk-tag">SQLite</span><span class="sk-tag">Git &amp; GitHub</span>
-            <span class="sk-tag">Microsoft Excel</span>
+      </div>
+
+      <div class="sk-bento-card rv rv-up" style="transition-delay:.3s">
+        <div class="bento-glow"></div>
+        <div class="bento-content">
+          <div class="bento-header">
+            <span class="bento-num">05</span>
+            <h3 class="bento-title">Web &amp; APIs</h3>
+          </div>
+          <div class="bento-tags">
+            <span>Next.js</span><span>Flask</span><span>FastAPI</span><span>REST APIs</span>
           </div>
         </div>
-        <div class="skill-cat rv rv-up">
-          <div class="sk-cat-lbl">Web &amp; APIs</div>
-          <div class="sk-tags">
-            <span class="sk-tag">Next.js</span><span class="sk-tag">Flask</span>
-            <span class="sk-tag">FastAPI</span><span class="sk-tag">REST APIs</span>
+      </div>
+
+      <div class="sk-bento-card rv rv-up" style="transition-delay:.35s">
+        <div class="bento-glow"></div>
+        <div class="bento-content">
+          <div class="bento-header">
+            <span class="bento-num">06</span>
+            <h3 class="bento-title">Business Skills</h3>
           </div>
-        </div>
-        <div class="skill-cat rv rv-up">
-          <div class="sk-cat-lbl">Business Skills</div>
-          <div class="sk-tags">
-            <span class="sk-tag">EDA</span><span class="sk-tag">KPI Reporting</span>
-            <span class="sk-tag">Stakeholder Communication</span>
-            <span class="sk-tag">Data Storytelling</span>
+          <div class="bento-tags">
+            <span>EDA</span><span>KPI Reporting</span><span>Stakeholder Communication</span><span>Data Storytelling</span>
           </div>
         </div>
       </div>
@@ -3603,7 +3796,7 @@
       function startAudio() {
         if (started) return;
         started = true;
-        bgAudio.play().catch(() => {});
+        bgAudio.play().catch(() => { });
       }
       ['click', 'touchstart', 'keydown', 'scroll'].forEach(evt =>
         document.addEventListener(evt, startAudio, { once: true, passive: true })
@@ -3924,22 +4117,24 @@
     })();
 
     /* ══════════════════════════════════════════════════════════════
-       EXPERIENCE TIMELINE — SVG WINDING ENERGY PATH
-       A sinusoidal bezier path flows between experience nodes.
+       UNIFIED TIMELINE — SVG WINDING THUNDER ENERGY PATH
+       A sinusoidal bezier path flows between nodes.
        The orb rides the curve, the track bends toward the cursor,
-       and hovering a card magnetically pulls the orb to that node.
+       and an erratic lightning path crackles with feTurbulence.
        ══════════════════════════════════════════════════════════════ */
-    (function () {
-      const tl = document.querySelector('.exp-timeline');
+    function initEnergyPath(containerSelector, itemSelector, config) {
+      const tl = document.querySelector(containerSelector);
       if (!tl) return;
-      const items = [...document.querySelectorAll('.exp-item')];
+      const items = [...document.querySelectorAll(itemSelector)];
       if (!items.length) return;
 
       /* inject burst-ring into each item */
       items.forEach(it => {
-        const b = document.createElement('span');
-        b.className = 'node-burst';
-        it.appendChild(b);
+        if (!it.querySelector('.node-burst')) {
+          const b = document.createElement('span');
+          b.className = 'node-burst';
+          it.appendChild(b);
+        }
       });
 
       /* ── BUILD SVG ──────────────────────────── */
@@ -3947,23 +4142,29 @@
       const svg = document.createElementNS(NS, 'svg');
       svg.setAttribute('class', 'tl-svg');
       svg.setAttribute('preserveAspectRatio', 'none');
+      if (config.left) svg.style.left = config.left;
       tl.prepend(svg);
 
-      /* defs: gradient, glow filter, orb radial */
+      /* defs: gradient, glow filter, orb radial, THUNDER filter */
       const defs = document.createElementNS(NS, 'defs');
       defs.innerHTML = `
-    <linearGradient id="tlG" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1000">
-      <stop offset="0%"   stop-color="rgba(201,168,76,.05)"/>
-      <stop offset="100%" stop-color="#E8BB4D"/>
-    </linearGradient>
-    <radialGradient id="tlOrb">
-      <stop offset="0%"   stop-color="rgba(255,238,190,1)"/>
-      <stop offset="35%"  stop-color="rgba(232,200,107,.65)"/>
-      <stop offset="100%" stop-color="rgba(201,168,76,0)"/>
-    </radialGradient>
-    <filter id="tlGlow"><feGaussianBlur stdDeviation="5" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <filter id="tlSoft"><feGaussianBlur stdDeviation="3"/></filter>`;
+        <linearGradient id="tlG_${config.id}" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1000">
+          <stop offset="0%"   stop-color="rgba(201,168,76,.05)"/>
+          <stop offset="100%" stop-color="#E8BB4D"/>
+        </linearGradient>
+        <radialGradient id="tlOrb_${config.id}">
+          <stop offset="0%"   stop-color="rgba(255,238,190,1)"/>
+          <stop offset="35%"  stop-color="rgba(232,200,107,.65)"/>
+          <stop offset="100%" stop-color="rgba(201,168,76,0)"/>
+        </radialGradient>
+        <filter id="tlGlow_${config.id}"><feGaussianBlur stdDeviation="5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="tlSoft_${config.id}"><feGaussianBlur stdDeviation="3"/></filter>
+        <style>
+          .beam-transition { transition: stroke-width 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.2s; }
+          .beam-surge { stroke-width: 12px !important; stroke: #FFD700 !important; }
+        </style>
+      `;
       svg.appendChild(defs);
 
       /* track (faint dashed winding line) */
@@ -3981,13 +4182,31 @@
       glow.setAttribute('stroke', 'rgba(232,200,107,0.25)');
       glow.setAttribute('stroke-width', '8');
       glow.setAttribute('stroke-linecap', 'round');
-      glow.setAttribute('filter', 'url(#tlSoft)');
+      glow.setAttribute('filter', `url(#tlSoft_${config.id})`);
       svg.appendChild(glow);
+
+      /* STRONG BOLD ENERGY BEAM */
+      const beam = document.createElementNS(NS, 'path');
+      beam.setAttribute('fill', 'none');
+      beam.setAttribute('stroke', '#FFFFFF');
+      beam.setAttribute('stroke-width', '5');
+      beam.setAttribute('stroke-linecap', 'round');
+      beam.setAttribute('filter', `url(#tlGlow_${config.id})`);
+      beam.setAttribute('class', 'beam-transition');
+      svg.appendChild(beam);
+
+      /* PLASMA ARC -> Crackling lightning to cursor */
+      const plasmaArc = document.createElementNS(NS, 'path');
+      plasmaArc.setAttribute('fill', 'none');
+      plasmaArc.setAttribute('stroke', '#FFD700');
+      plasmaArc.setAttribute('stroke-width', '2');
+      plasmaArc.setAttribute('filter', `url(#tlGlow_${config.id})`);
+      svg.appendChild(plasmaArc);
 
       /* bright progress path */
       const bright = document.createElementNS(NS, 'path');
       bright.setAttribute('fill', 'none');
-      bright.setAttribute('stroke', 'url(#tlG)');
+      bright.setAttribute('stroke', `url(#tlG_${config.id})`);
       bright.setAttribute('stroke-width', '2.5');
       bright.setAttribute('stroke-linecap', 'round');
       svg.appendChild(bright);
@@ -3995,10 +4214,11 @@
       /* energy orb (outer glow + inner core) */
       const orb = document.createElementNS(NS, 'circle');
       orb.setAttribute('r', '10');
-      orb.setAttribute('fill', 'url(#tlOrb)');
-      orb.setAttribute('filter', 'url(#tlGlow)');
+      orb.setAttribute('fill', `url(#tlOrb_${config.id})`);
+      orb.setAttribute('filter', `url(#tlGlow_${config.id})`);
       orb.setAttribute('class', 'tl-orb');
       svg.appendChild(orb);
+      
       const orbCore = document.createElementNS(NS, 'circle');
       orbCore.setAttribute('r', '3');
       orbCore.setAttribute('fill', '#FFEEBE');
@@ -4006,21 +4226,21 @@
       svg.appendChild(orbCore);
 
       /* ── PATH GEOMETRY ────────────────────────── */
-      const CX = 33;   /* centre-x in SVG coords (maps to left:1px of timeline) */
-      const AMP = 26;   /* base S-curve amplitude */
-      let cursorLocalY = -9999;  /* cursor Y relative to tl top (page coords) */
+      const CX = config.cx || 33; 
+      const AMP = config.amp || 26;
+      let cursorLocalY = -9999;
       let cursorLocalX = 0;
+      let needsRebuild = true;
 
       document.addEventListener('mousemove', e => {
         const r = tl.getBoundingClientRect();
         cursorLocalY = e.clientY - r.top + window.scrollY - (window.scrollY - (tl.offsetTop || 0));
         cursorLocalX = e.clientX - r.left;
-        /* recalculate on mouse if cursor is near the timeline */
-        if (Math.abs(cursorLocalX) < 200) needsRebuild = true;
+        if (Math.abs(cursorLocalX) < 300) needsRebuild = true;
       }, { passive: true });
 
       function getNodeYs() {
-        return items.map(it => it.offsetTop + 10);
+        return items.map(it => it.offsetTop + (config.yOffset || 10));
       }
 
       function buildD(nodeYs, bend) {
@@ -4029,17 +4249,15 @@
         nodeYs.forEach((y, i) => {
           const prevY = i === 0 ? 0 : nodeYs[i - 1];
           const dir = i % 2 === 0 ? 1 : -1;
-          /* cursor bend: control points shift toward the mouse */
           const midY = (prevY + y) / 2;
           const dist = Math.abs(midY - cursorLocalY);
           const pull = Math.max(0, 1 - dist / 280) * bend;
-          const cpull = (cursorLocalX - 0) * 0.08 * pull;  /* 0 = timeline left */
+          const cpull = (cursorLocalX - 0) * 0.08 * pull;
           const amp = AMP * dir + cpull;
           const cp1y = prevY + (y - prevY) * 0.35;
           const cp2y = prevY + (y - prevY) * 0.65;
           d += ` C ${CX + amp},${cp1y} ${CX - amp * 0.6},${cp2y} ${CX},${y}`;
         });
-        /* tail to bottom */
         const lastY = nodeYs[nodeYs.length - 1];
         const tailDir = nodeYs.length % 2 === 0 ? 1 : -1;
         const tailMid = lastY + (h - lastY) * 0.5;
@@ -4047,13 +4265,10 @@
         return d;
       }
 
-      /* ── RENDER + SCROLL ─────────────────────── */
       let totalLen = 0;
-      let needsRebuild = true;
       const litSet = new Set();
-      let magnetTarget = -1;  /* index of hovered item (-1 = none) */
+      let magnetTarget = -1;
 
-      /* hover interaction: card hover magnetically attracts the orb */
       items.forEach((it, idx) => {
         it.style.pointerEvents = 'auto';
         it.addEventListener('mouseenter', () => { magnetTarget = idx; });
@@ -4068,34 +4283,35 @@
         track.setAttribute('d', d);
         bright.setAttribute('d', d);
         glow.setAttribute('d', d);
+        beam.setAttribute('d', d);
+        
         totalLen = bright.getTotalLength();
         bright.setAttribute('stroke-dasharray', totalLen);
         glow.setAttribute('stroke-dasharray', totalLen);
-        /* update gradient extent */
-        svg.querySelector('#tlG').setAttribute('y2', tl.scrollHeight);
+        beam.setAttribute('stroke-dasharray', totalLen);
+        
+        svg.querySelector(`#tlG_${config.id}`).setAttribute('y2', tl.scrollHeight);
         needsRebuild = false;
       }
 
-      function tick() {
+      function tick(time) {
         requestAnimationFrame(tick);
         if (needsRebuild) rebuild();
         if (totalLen <= 0) return;
 
-        /* scroll progress */
         const r = tl.getBoundingClientRect();
         const trigger = window.innerHeight * 0.62;
         let p = Math.max(0, Math.min(1, (trigger - r.top) / r.height));
         const offset = totalLen * (1 - p);
+        
         bright.setAttribute('stroke-dashoffset', offset);
         glow.setAttribute('stroke-dashoffset', offset);
+        beam.setAttribute('stroke-dashoffset', offset);
 
-        /* orb target: progress point or magnetically pulled to hovered node */
         let targetPt = bright.getPointAtLength(totalLen * p);
         if (magnetTarget >= 0) {
           const nodeYs = getNodeYs();
-          /* find the length along the path that corresponds to this node Y */
           const nt = nodeYs[magnetTarget];
-          /* binary-search-lite: walk the path in 20 steps to find closest */
           let bestDist = 1e9, bestLen = totalLen * p;
           for (let s = 0; s <= 40; s++) {
             const l = (s / 40) * totalLen;
@@ -4106,7 +4322,6 @@
           targetPt = bright.getPointAtLength(bestLen);
         }
 
-        /* smooth ease the orb */
         smoothOrbX += (targetPt.x - smoothOrbX) * 0.12;
         smoothOrbY += (targetPt.y - smoothOrbY) * 0.12;
         orb.setAttribute('cx', smoothOrbX);
@@ -4114,12 +4329,31 @@
         orbCore.setAttribute('cx', smoothOrbX);
         orbCore.setAttribute('cy', smoothOrbY);
 
-        /* light up nodes */
+        /* Plasma Cursor Interaction */
+        const dx = cursorLocalX - smoothOrbX;
+        const dy = cursorLocalY - smoothOrbY;
+        const dist = Math.hypot(dx, dy);
+        
+        if (dist < 300 && dist > 15) {
+           const mid1x = smoothOrbX + dx * 0.33 + (Math.random() - 0.5) * 40;
+           const mid1y = smoothOrbY + dy * 0.33 + (Math.random() - 0.5) * 40;
+           const mid2x = smoothOrbX + dx * 0.66 + (Math.random() - 0.5) * 40;
+           const mid2y = smoothOrbY + dy * 0.66 + (Math.random() - 0.5) * 40;
+           plasmaArc.setAttribute('d', `M ${smoothOrbX},${smoothOrbY} L ${mid1x},${mid1y} L ${mid2x},${mid2y} L ${cursorLocalX},${cursorLocalY}`);
+           plasmaArc.style.opacity = 1 - (dist / 300);
+        } else {
+           plasmaArc.setAttribute('d', '');
+        }
+
         const tipY = r.top + r.height * p;
         items.forEach(it => {
-          const dotY = it.getBoundingClientRect().top + 8;
+          const dotY = it.getBoundingClientRect().top + (config.yOffset || 8);
           const shouldLight = dotY <= tipY + 2;
-          it.classList.toggle('lit', shouldLight);
+          
+          if (!config.disableLitToggle) {
+             it.classList.toggle('lit', shouldLight);
+          }
+          
           if (shouldLight && !litSet.has(it)) {
             litSet.add(it);
             const old = it.querySelector('.node-burst');
@@ -4132,7 +4366,13 @@
       tick();
       window.addEventListener('scroll', () => { needsRebuild = true; }, { passive: true });
       window.addEventListener('resize', () => { needsRebuild = true; });
-    })();
+      window.addEventListener('mousedown', () => beam.classList.add('beam-surge'));
+      window.addEventListener('mouseup', () => beam.classList.remove('beam-surge'));
+    }
+
+    /* Initialize unified energy paths on both sections */
+    initEnergyPath('.exp-timeline', '.exp-item', { id: 'exp', cx: 33, amp: 26, left: '-32px' });
+    initEnergyPath('.edu-sticky-right', '.edu-scroll-item', { id: 'edu', cx: 10, amp: 20, left: '-15px', yOffset: 125, disableLitToggle: true });
 
     /* ── 3-D TILT ON PROJECT CARDS ───────────────────────────── */
     document.querySelectorAll('.proj-card').forEach(card => {
@@ -4154,6 +4394,60 @@
         glow.style.setProperty('--my', (e.clientY - r.top) + 'px');
       });
     });
+
+    /* ── MAGIC GLOW ON BENTO CARDS ───────────────────────────── */
+    document.querySelectorAll('.sk-bento-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+
+    /* ── STICKY SCROLL EDUCATION TIMELINE ────────────────────── */
+    (function() {
+      const yearDisplay = document.getElementById('eduYearDisplay');
+      const items = Array.from(document.querySelectorAll('.edu-scroll-item'));
+      if (!yearDisplay || items.length === 0) return;
+
+      let activeItem = null;
+
+      function updateActive() {
+        const viewportCenter = window.innerHeight / 2;
+        let closest = null;
+        let minDiff = Infinity;
+
+        items.forEach(item => {
+          const rect = item.getBoundingClientRect();
+          const itemCenter = rect.top + rect.height / 2;
+          const diff = Math.abs(viewportCenter - itemCenter);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closest = item;
+          }
+        });
+
+        if (closest && closest !== activeItem) {
+          items.forEach(i => i.classList.remove('active'));
+          closest.classList.add('active');
+          activeItem = closest;
+
+          const year = closest.getAttribute('data-year');
+          if (yearDisplay.innerText !== year) {
+            yearDisplay.classList.add('changing');
+            setTimeout(() => {
+              yearDisplay.innerText = year;
+              yearDisplay.classList.remove('changing');
+            }, 300);
+          }
+        }
+      }
+
+      window.addEventListener('scroll', updateActive, { passive: true });
+      updateActive();
+    })();
 
     /* ── SMOOTH SCROLL ───────────────────────────────────────── */
     document.querySelectorAll('a[href^="#"]').forEach(a => {

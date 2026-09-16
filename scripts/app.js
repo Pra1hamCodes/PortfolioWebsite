@@ -1,3 +1,4 @@
+const $=(s,r=document)=>r.querySelector(s);const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 document.addEventListener('click', event => { if (!event.target.closest('#contextMenu')) $('#contextMenu').hidden = true; });
 const projectFolderLabel='My Projects';
 document.addEventListener('DOMContentLoaded',()=>{$$('.network-avatar').forEach(avatar=>{avatar.innerHTML='<img src="PHOTO.png" alt="Prathmesh Pandey">';avatar.setAttribute('aria-label','Prathmesh Pandey')})});
